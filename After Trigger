@@ -1,0 +1,13 @@
+trigger NeworOldAccount on Contact (before insert) {
+    integer points = 0; 
+    List<Contact> exportaccounts = new List<Contact>();
+    for(Contact a : Trigger.New){ 
+        Account finalresult = IsRelated.isContactRelated(a);
+        if(finalresult != null){
+            a.AccountId = finalresult.ID;
+        }
+         else{}
+    }
+    
+    
+}
