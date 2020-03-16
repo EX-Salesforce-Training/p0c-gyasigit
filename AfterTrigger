@@ -1,0 +1,18 @@
+trigger AccountRelatedTo on Account (after insert) {
+    for(Account a : Trigger.New){ 
+        
+       String Contactname = '%'+ a.Name + '%' ; 
+        
+       List <Contact> myac =  [SELECT LastName, AccountID FROM Contact WHERE LastName LIKE : Contactname LIMIT 1];
+        if(myac.size()<1){ 
+        system.debug(myac.size()); 
+        }
+        else if(myac.size() > 0){ 
+         myac[0].AccountID = a.ID; 
+         update myac[0]; 
+        }
+
+
+        
+        }
+}
