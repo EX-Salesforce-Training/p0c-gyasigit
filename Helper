@@ -1,0 +1,71 @@
+public class IsRelated {
+    
+    public static Account isContactRelated(Contact a){ 
+      String testadd =  a.MailingPostalCode; 
+      Boolean doesitexist = false; 
+        List<Account> testacc = [SELECT BillingAddress, ShippingAddress,
+                                 BillingCountry,ShippingCountry,
+                                 BillingState, ShippingState,
+                                 BillingPostalCode, ShippingPostalCode,
+                                 BillingCity, ShippingCity,  
+                              	 BillingStreet, ShippingStreet, Phone
+                                 FROM Account Where BillingPostalCode =: testadd OR ShippingPostalCode =: testadd];
+        for(integer i = 0; i < testacc.size(); i++){
+            // if you would like to make it more specific in the future you can add code here; 
+            if(a.MailingCountry == testacc[i].BillingCountry){
+                if(a.MailingState == testacc[i].ShippingState || a.MailingState == testacc[i].BillingState){
+                    if(a.MailingCity == testacc[i].ShippingCity ||
+                       a.MailingCity == testacc[i].BillingCity){
+                           if(a.MailingPostalCode == testacc[i].ShippingPostalCode ||
+                              a.MailingPostalCode == testacc[i].BillingPostalCode){
+                                  if(a.MailingStreet == testacc[i].ShippingStreet ||
+                                     a.MailingStreet == testacc[i].BillingStreet){
+                                         //a.AccountId = testacc[i].ID;
+                                         doesitexist = true; 
+                                     }
+                                  else if(a.MailingStreet == null || a.MailingStreet != testacc[i].BillingStreet ){
+                                      String testpersonaldetails = testacc[i].Phone; 
+                                      if(a.Email == testpersonaldetails){
+                                           doesitexist = true; 
+                                          //a.accountID = testacc[i].ID;
+   
+                            String adesc = (' This was flagged as a potential duplicate contact for this account' + 
+                                      ' instead this contact was related to this account ' + 
+                                      ' if there has been a mistake contact your administrator');
+                                        a.Description = adesc;  
+                                      }
+                                      else{ 
+                                      doesitexist =  false;
+                                      }
+                                      
+                                  }
+                              }
+                           else if(a.MailingPostalCode == null){ 
+                               break;
+                                   }
+                       }
+                    else if(a.MailingCity == null){ 
+                    break; 
+                        }
+                }
+                else if(a.MailingState == null){ 
+                    break;
+            }
+            }
+            
+            else if(a.MailingCountry == null){ 
+                doesitexist = false; 
+                //break;
+                }
+            
+            else{ 
+            doesitexist = false; 
+            }
+            if(doesitexist == true){ 
+           		return testacc[i];
+            }
+        }
+       			return null ; 
+		         
+    }
+}
