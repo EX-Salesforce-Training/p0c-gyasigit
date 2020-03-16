@@ -1,0 +1,61 @@
+@isTest
+public class TestTriggers {
+    @isTest
+    static public void TestBeforeinsert(){ 
+        
+    	Contact inserter = new Contact(FirstName = 'Kanye', LastName = 'Shamwow',
+                                   MailingCountry = 'USA',
+                                   MailingState = 'NY',
+                                   MailingPostalCode = '12034',
+                                   MailingCity = 'New York',
+                                   MailingStreet = '2000 White House Lane');
+    	Contact inserter2 = new Contact(FirstName = 'Johnson', LastName = 'Joel',
+                                   MailingCountry = 'USA',
+                                   MailingState = 'NY',
+                                   MailingPostalCode = '12035',
+                                   MailingCity = 'New York',
+                                   MailingStreet = '2000 White House Lane');
+        Contact inserter3 = new Contact(FirstName = 'Jackson', LastName = 'Randy',
+                                   MailingCountry = 'USA',
+                                   MailingState = 'NY',
+                                   MailingPostalCode = '12035',
+                                   MailingCity = 'New York',
+                                   MailingStreet = '2005 White House Lane', 
+                                   Phone = '6464541092');
+        
+        Account accinsert = new Account(Name = 'Joes Account',
+                                   BillingCountry = 'USA',
+                                   BillingState = 'NY',
+                                   BillingPostalCode = '12034',
+                                   BillingCity = 'New York',
+                                   BillingStreet = '2000 White House Lane',
+                                   ShippingCountry = 'USA',
+                                   ShippingState = 'NY',
+                                   ShippingPostalCode = '12034',
+                                   ShippingCity = 'New York',
+                                   ShippingStreet = '1235 White House Lane',
+                                   Phone = '6464541092');
+        
+       
+        system.debug(accinsert);
+        insert accinsert;
+        insert inserter; 
+        insert inserter3;
+        insert inserter2; 
+        
+        Test.startTest(); 
+        Contact num1 = [SELECT AccountId FROM Contact Where FirstName = 'Kanye' ]; 
+        Contact num2 = [SELECT AccountId FROM Contact Where FirstName = 'Johnson' ]; //not related
+        Contact num3 = [SELECT AccountId FROM Contact Where FirstName = 'Jackson' ]; //not related
+        Account one = [SELECT Id FROM Account Where Name = 'Joes Account'];
+        Test.stopTest();
+        
+        
+        system.assertEquals(one.ID,num1.AccountID);
+        system.assertNotEquals(one.ID, num2.AccountID);
+   		//system.assertEquals(one.ID, num3.AccountID);
+    }
+    
+    
+
+}
